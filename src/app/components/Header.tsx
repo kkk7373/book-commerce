@@ -1,7 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-const Header: React.FC = () => {
+import { getServerSession } from "next-auth";
+import { nextAuthOptions } from "../lib/next-auth/option";
+const Header: React.FC = async () => {
+  const session = await getServerSession(nextAuthOptions);
+  const user = session?.user;
   return (
     <header className="bg-slate-600 text-gray-100 shadow-lg">
       <nav className="flex items-center justify-between p-4">
@@ -16,28 +20,34 @@ const Header: React.FC = () => {
             ホーム
           </Link>
           <Link
-            href="/login"
+            href={user ? "/profile" : "/api/auth/signin"}
             className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
           >
-            ログイン
+            {user ? "プロフィール" : "ログイン"}
           </Link>
-          {/* {user ? (
+          {user ? (
+            // <button
+            //   // onClick={() => signOut({ callbackUrl: "/login" })}
+            //   className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+            // >
+            //   ログアウト
+            // </button>
             <Link
-              href={"/api/auth/signout?callbackUrl=/"}
+              href="/api/auth/signout"
               className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
             >
               ログアウト
             </Link>
           ) : (
             ""
-          )} */}
+          )}
 
           <Link href={`/profile`}>
             <Image
               width={50}
               height={50}
               alt="profile_icon"
-              src="/default_icon.png"
+              src={user?.image || "/default_icon.png"}
             />
           </Link>
         </div>
