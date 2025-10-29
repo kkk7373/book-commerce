@@ -11,7 +11,7 @@ export default async function Home() {
   const books = contents as unknown as BookType[];
   const session = await getServerSession(nextAuthOptions);
   const user = session?.user as User;
-  let purchasedBookIds: string[];
+  let purchasedBookIds: string[] = [];
   if (user) {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/purchases/${user.id}/`

@@ -4,9 +4,9 @@ import prisma from "@/app/lib/prisma";
 //特定ユーザーの購入履歴を取得
 export async function GET(
   request: Request,
-  { params }: { params: { userId: string } }
+  context: { params: Promise<{ userId: string }> }
 ) {
-  const { userId } = params;
+  const { userId } = await context.params;
   try {
     const purchases = await prisma.purchase.findMany({
       where: {

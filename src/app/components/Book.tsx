@@ -49,7 +49,7 @@ const Book = ({ book, isPurchased }: Props) => {
   const purchaseConfirm = () => {
     if (!user) {
       // ログインしていない場合の処理
-      router.push("/login");
+      router.push("/api/auth/signin");
     } else {
       // 購入処理をここに追加
       startCheckout();

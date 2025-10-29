@@ -2,8 +2,8 @@ import Image from "next/image";
 import React from "react";
 import { getDetailedBook } from "@/app/lib/microCMS/client";
 
-const DetailBook = async ({ params }: { params: { id: string } }) => {
-  const book = await getDetailedBook(params.id);
+const DetailBook = async (context: { params: Promise<{ id: string }> }) => {
+  const book = await getDetailedBook((await context.params).id);
   return (
     <div className="container mx-auto p-4">
       <div className="bg-white shadow-lg rounded-lg overflow-hidden">
