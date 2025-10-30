@@ -12,13 +12,16 @@ const PurchaseSuccess = () => {
     if (sessionId) {
       try {
         const fetchData = async () => {
-          const res = await fetch("/api/checkout_sessions/success", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ sessionId }),
-          });
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/api/checkout_sessions/success`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ sessionId }),
+            }
+          );
           const data = await res.json();
           console.log(data, "purchase data here");
           setBookUrl(data.bookId);

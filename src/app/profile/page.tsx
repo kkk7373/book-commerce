@@ -1,9 +1,8 @@
-import { get } from "http";
 import Image from "next/image";
 import { getServerSession } from "next-auth";
-import { nextAuthOptions } from "../lib/next-auth/option";
+import { nextAuthOptions } from "@/app/lib/next-auth/option";
 import { BookType, Purchase, User } from "@/types/types";
-import { getDetailedBook } from "../lib/microCMS/client";
+import { getDetailedBook } from "@/app/lib/microCMS/client";
 import PurchaseDetailBook from "@/app/components/PurchaseDetailBook";
 export default async function ProfilePage() {
   const session = await getServerSession(nextAuthOptions);
