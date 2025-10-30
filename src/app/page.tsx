@@ -14,7 +14,7 @@ export default async function Home() {
   let purchasedBookIds: string[] = [];
   if (user) {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/purchases/${user.id}/`
+      `${process.env.NEXT_PUBLIC_API_URL}/api/purchases/${user.id}/`
     );
     const purchasedBooks = await response.json();
     purchasedBookIds = purchasedBooks.map((purchaseBook: Purchase) => {
