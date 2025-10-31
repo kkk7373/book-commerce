@@ -20,7 +20,6 @@ export default async function Home() {
     purchasedBookIds = purchasedBooks.map((purchaseBook: Purchase) => {
       return purchaseBook.bookId;
     });
-    console.log(purchasedBookIds, "purchased book ids here");
   }
   return (
     <div>
@@ -33,6 +32,7 @@ export default async function Home() {
             key={book.id}
             book={book}
             isPurchased={purchasedBookIds?.includes(book.id)}
+            user={user}
           />
         ))}
       </main>

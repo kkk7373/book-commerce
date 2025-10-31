@@ -4,60 +4,20 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { BookType, User } from "@/types/types";
+import { useBookPurchase } from "@/app/hooks/useBookPurchase";
 type Props = {
   book: BookType;
   isPurchased: boolean;
+  user: User;
 };
 
-const Book = ({ book, isPurchased }: Props) => {
-  const router = useRouter();
-  const { data: session } = useSession();
-  const user = session?.user as User;
-  const [showModal, setShowModal] = useState(false);
-  const handleCancel = () => {
-    setShowModal(false);
-  };
-  const handleShowModal = () => {
-    if (isPurchased) {
-      alert("この本は既に購入済みです。");
-    } else {
-      setShowModal(true);
-    }
-  };
-  const startCheckout = async () => {
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/checkout_sessions`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            title: book.title,
-            price: book.price,
-            bookId: book.id,
-            userId: user.id!,
-          }),
-        }
-      );
-      const responseData = await res.json();
-      if (responseData) {
-        router.push(responseData.checkoutURL);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
-  const purchaseConfirm = () => {
-    if (!user) {
-      // ログインしていない場合の処理
-      router.push("/api/auth/signin");
-    } else {
-      // 購入処理をここに追加
-      startCheckout();
-    }
-  };
+const Book = ({ book, isPurchased, user }: Props) => {
+  const { isOpen, open, close, handlePurchase } = useBookPurchase({
+    book,
+    user,
+    isPurchased,
+  });
+
   return (
     <>
       {/* アニメーションスタイル */}
@@ -79,7 +39,7 @@ const Book = ({ book, isPurchased }: Props) => {
 
       <div className="flex flex-col items-center m-4">
         <a
-          onClick={handleShowModal}
+          onClick={open}
           className="cursor-pointer shadow-2xl duration-300 hover:translate-y-1 hover:shadow-none"
         >
           <Image
@@ -97,18 +57,18 @@ const Book = ({ book, isPurchased }: Props) => {
           </div>
         </a>
 
-        {showModal && (
+        {isOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm modal">
             <div className="bg-white p-8 rounded-lg">
               <h3 className="text-xl mb-4">本を購入しますか？</h3>
               <button
-                onClick={purchaseConfirm}
+                onClick={handlePurchase}
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-4"
               >
                 購入する
               </button>
               <button
-                onClick={handleCancel}
+                onClick={close}
                 className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
               >
                 キャンセル

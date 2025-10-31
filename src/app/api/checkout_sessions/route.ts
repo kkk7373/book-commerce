@@ -38,7 +38,6 @@ export async function POST(req: Request) {
     });
     return NextResponse.json({ checkoutURL: session.url });
   } catch (err: any) {
-    console.log("create failed", err.message);
     return NextResponse.json(
       { error: "Stripe checkout session creation failed" },
       { status: 500 }

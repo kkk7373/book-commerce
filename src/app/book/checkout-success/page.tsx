@@ -7,13 +7,12 @@ const PurchaseSuccess = () => {
   const [bookUrl, setBookUrl] = React.useState("");
   const searchParams = useSearchParams();
   const sessionId = searchParams.get("session_id");
-  console.log("Session ID:", sessionId);
   useEffect(() => {
     if (sessionId) {
       try {
         const fetchData = async () => {
           const res = await fetch(
-            `/api/checkout_sessions/success`,
+            `${process.env.NEXT_PUBLIC_API_URL}/api/checkout_sessions/success`,
             {
               method: "POST",
               headers: {
@@ -23,7 +22,6 @@ const PurchaseSuccess = () => {
             }
           );
           const data = await res.json();
-          console.log(data, "purchase data here");
           setBookUrl(data.bookId);
         };
         fetchData();
